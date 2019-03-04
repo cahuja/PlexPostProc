@@ -67,16 +67,16 @@ if [ ! -z "$1" ]; then
    echo "********************************************************"
    echo "Transcoding, Converting to H.264 w/Handbrake"
    echo "********************************************************"
-   HandBrakeCLI -i "$FILENAME" -f mkv --srt-file "$TEMPSRTFILENAME" -srt-lang eng --srt-default --aencoder copy -e qsv_h264 --x264-preset veryfast --x264-profile auto -q 16 --maxHeight 1080 --decomb bob -o "$TEMPFILENAME" || fatal "Handbreak has failed (Is it installed?)"
+   HandBrakeCLI -i "$FILENAME" -f mkv --srt-file "$TEMPSRTFILENAME" --srt-lang eng --srt-codeset utf-8 --aencoder copy -e qsv_h264 --x264-preset veryfast --x264-profile auto -q 16 --maxHeight 1080 --decomb bob -o "$TEMPFILENAME" || fatal "Handbreak has failed (Is it installed?)"
 
    echo "********************************************************"
    echo "Cleanup / Copy $TEMPFILENAME to $FILENAME"
    echo "********************************************************"
 
-   rm -vf "$TEMPSRTFILENAME"
    rm -vf "$FILENAME"
-   mv -f "$TEMPFILENAME" "${FILENAME%.ts}.mkv"
-   ##chmod 777 "$FILENAME" # This step may no tbe neccessary, but hey why not.
+   mv -vf "$TEMPFILENAME" "${FILENAME%.ts}.mkv"  || fatal "mv transcoded file failed"
+   chmod -v 777 "$FILENAME" # This step may no tbe neccessary, but hey why not.
+   rm -vf "$TEMPSRTFILENAME"
 
    echo "Done.  Congrats!"
 else
