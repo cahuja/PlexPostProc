@@ -43,7 +43,7 @@ fatal() {
 }
 # The above is a simple function for handeling fatal erros. (It outputs an error, and exits the program.)
 
-if [ ! -z "$1" ]; then 
+if [ -n "$1" ]; then
 # The if selection statement proceeds to the script if $1 is not empty.
    if [ ! -f "$1" ]; then 
       fatal "$1 does not exist"
@@ -73,11 +73,11 @@ if [ ! -z "$1" ]; then
    echo "Cleanup / Copy $TEMPFILENAME to $FILENAME"
    echo "********************************************************"
 
-   rm -vf "$FILENAME"
    mv -vf "$TEMPFILENAME" "${FILENAME%.ts}.mkv"  || fatal "mv transcoded file failed"
-   chmod -v 777 "$FILENAME" # This step may no tbe neccessary, but hey why not.
+   chmod -v 644 "${FILENAME%.ts}.mkv"
+   rm -vf "$FILENAME"
    rm -vf "$TEMPSRTFILENAME"
-
+   sleep 20
    echo "Done.  Congrats!"
 else
    echo "PlexPostProc by nebhead"
