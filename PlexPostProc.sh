@@ -67,7 +67,8 @@ if [ -n "$1" ]; then
    echo "********************************************************"
    echo "Transcoding, Converting to H.264 w/Handbrake"
    echo "********************************************************"
-   HandBrakeCLI -i "$FILENAME" -f mkv --srt-file "$TEMPSRTFILENAME" --srt-lang eng --srt-codeset utf-8 --aencoder copy -e qsv_h264 --x264-preset veryfast --x264-profile auto -q 16 --maxHeight 1080 --decomb bob -o "$TEMPFILENAME" || fatal "Handbreak has failed (Is it installed?)"
+   #HandBrakeCLI -i "$FILENAME" -f mkv --srt-file "$TEMPSRTFILENAME" --srt-lang eng --srt-codeset utf-8 --aencoder copy -e qsv_h264 --x264-preset veryfast --x264-profile auto -q 16 --maxHeight 1080 --decomb bob -o "$TEMPFILENAME" || fatal "Handbreak has failed (Is it installed?)"
+   HandBrakeCLI -i "$FILENAME"  --srt-file "$TEMPSRTFILENAME" --srt-lang eng --srt-codeset utf-8 --preset  "H.264 MKV 1080p30"  -o "$TEMPFILENAME" || fatal "Handbreak has failed (Is it installed?)"
 
    echo "********************************************************"
    echo "Cleanup / Copy $TEMPFILENAME to $FILENAME"
