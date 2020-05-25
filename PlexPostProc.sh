@@ -39,6 +39,8 @@
 fatal() {
    echo "[FATAL] $1.";
    echo "[FATAL] Program is now exiting.";
+   rm -vf "$FILENAME"
+   sleep 20
    exit 1;
 }
 # The above is a simple function for handeling fatal erros. (It outputs an error, and exits the program.)
@@ -75,7 +77,9 @@ if [ -n "$1" ]; then
    echo "********************************************************"
 
    mv -vf "$TEMPFILENAME" "${FILENAME%.ts}.mkv"  || fatal "mv transcoded file failed"
+   mv -vf "$TEMPSRTFILENAME" "${FILENAME%.ts}.srt"
    chmod -v 644 "${FILENAME%.ts}.mkv"
+   chmod -v 644 "${FILENAME%.ts}.srt"
    rm -vf "$FILENAME"
    rm -vf "$TEMPSRTFILENAME"
    sleep 20
