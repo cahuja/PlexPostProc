@@ -54,7 +54,7 @@ if [ -n "$1" ]; then
    
    FILENAME=$1 	# %FILE% - Filename of original file
 
-   TEMPFILENAME="$(mktemp)"  # Temporary File for transcoding
+   #TEMPFILENAME="$(mktemp)"  # Temporary File for transcoding
 
    # Uncomment if you want to adjust the bandwidth for this thread
    #MYPID=$$	# Process ID for current script
@@ -64,25 +64,29 @@ if [ -n "$1" ]; then
    echo "Extracting subtitles w/ ccextractor for $FILENAME"
    echo "********************************************************"
    TEMPSRTFILENAME="/tmp/$(basename "$FILENAME" .ts).srt"
-   ccextractor "$FILENAME" -o "$TEMPSRTFILENAME"  || fatal "ccextractor has failed. Is it installed? There should be a symbolic link in /usr/local/bin"
+   ccextractor "$FILENAME" -o "$TEMPSRTFILENAME" 
+   #ccextractor "$FILENAME" -o "$TEMPSRTFILENAME" || fatal "ccextractor has failed. Is it installed? There should be a symbolic link in /usr/local/bin"
+   #ccextractor "$FILENAME" -svc all[UTF-8] -o "$TEMPSRTFILENAME" || fatal "ccextractor has failed. Is it installed? There should be a symbolic link in /usr/local/bin"
 
-   echo "********************************************************"
-   echo "Transcoding, Converting to H.264 w/Handbrake"
-   echo "********************************************************"
+   # This section is less important since Plex now does transcoding as part of it's DVR process and this just mucks things up. I'm going to keep extracting subtitles for now
+   #echo "********************************************************"
+   #echo "Transcoding, Converting to H.264 w/Handbrake"
+   #echo "********************************************************"
    #HandBrakeCLI -i "$FILENAME" -f mkv --srt-file "$TEMPSRTFILENAME" --srt-lang eng --srt-codeset utf-8 --aencoder copy -e qsv_h264 --x264-preset veryfast --x264-profile auto -q 16 --maxHeight 1080 --decomb bob -o "$TEMPFILENAME" || fatal "Handbreak has failed (Is it installed?)"
    #HandBrakeCLI -i "$FILENAME"  --srt-file "$TEMPSRTFILENAME" --srt-lang eng --srt-codeset utf-8 --preset  "H.264 MKV 1080p30"  -o "$TEMPFILENAME" || fatal "Handbreak has failed (Is it installed?)"
-   HandBrakeCLI -i "$FILENAME"  --preset  "H.264 MKV 1080p30"  -o "$TEMPFILENAME" || fatal "Handbreak has failed (Is it installed?)"
+   #HandBrakeCLI -i "$FILENAME"  --preset  "H.264 MKV 1080p30"  -o "$TEMPFILENAME" || fatal "Handbreak has failed (Is it installed?)"
 
    echo "********************************************************"
-   echo "Cleanup / Copy $TEMPFILENAME to $FILENAME"
+   #echo "Cleanup / Copy $TEMPFILENAME to $FILENAME"
+   echo "CLeanup"
    echo "********************************************************"
 
-   mv -vf "$TEMPFILENAME" "${FILENAME%.ts}.mkv"  || fatal "mv transcoded file failed"
-   mv -vf "$TEMPSRTFILENAME" "${FILENAME%.ts}.srt"
-   chmod -v 644 "${FILENAME%.ts}.mkv"
-   chmod -v 644 "${FILENAME%.ts}.srt"
-   rm -vf "$FILENAME"
-   rm -vf "$TEMPSRTFILENAME"
+   #mv -vf "$TEMPFILENAME" "${FILENAME%.ts}.mkv"  || fatal "mv transcoded file failed"
+   mv -vf "$TEMPSRTFILENAME" "${FILENAME%.ts}.eng.srt"
+   #chmod -v 644 "${FILENAME%.ts}.mkv"
+   chmod -v 644 "${FILENAME%.ts}.eng.srt"
+   #rm -vf "$FILENAME"
+   #rm -vf "$TEMPSRTFILENAME"
    sleep 20
    echo "Done.  Congrats!"
 else
