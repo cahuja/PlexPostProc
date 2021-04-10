@@ -87,7 +87,6 @@ if [ -n "$1" ]; then
    chmod -v 644 "${FILENAME%.ts}.eng.srt"
    #rm -vf "$FILENAME"
    #rm -vf "$TEMPSRTFILENAME"
-   sleep 20
    echo "Done.  Congrats!"
 else
    echo "PlexPostProc by nebhead"
